@@ -17,9 +17,9 @@ const options = {
     },
     servers: [
       {
-        url: process.env.SWAGGER_LOCAL_SERVER_URL,
+        url: "http://localhost:3001",
         description: "Local server",
-      }
+      },
     ],
   },
   apis: ["./src/Routes/*.js"],
@@ -27,14 +27,10 @@ const options = {
 
 const swaggerSpec = swaggerJsdoc(options);
 
-function swaggerDocs(app, authMiddleware) {
-  app.use(
-    "/todo-api-docs",
-    authMiddleware,
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec)
-  );
-  app.get("/docs.json", (res) => {
+function swaggerDocs(app) {
+  app.use("/todo-api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+  app.get("/docs.json", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     res.send(swaggerSpec);
   });

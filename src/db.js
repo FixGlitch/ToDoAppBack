@@ -20,16 +20,17 @@ const sequelize = new Sequelize(
 const basename = path.basename(__filename);
 const modelDefiners = [];
 
-fs.readdirSync(path.join(__dirname, "./Models"))
+fs.readdirSync(path.join(__dirname, "./models"))
   .filter(
     (file) =>
       file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
   )
   .forEach((file) => {
-    modelDefiners.push(require(path.join(__dirname, "/Models", file)));
+    const modelDefiner = require(path.join(__dirname, "./models", file));
+    modelDefiners.push(modelDefiner);
   });
 
-modelDefiners.forEach((modelDefiner) => modelDefiner(sequelize, DataTypes));
+modelDefiners.forEach((modelDefiner) => modelDefiner(sequelize));
 
 const entries = Object.entries(sequelize.models);
 const capsEntries = entries.map(([key, value]) => [

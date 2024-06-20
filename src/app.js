@@ -1,12 +1,23 @@
+require("dotenv").config();
 const express = require("express");
-const server = express();
-const router = require("./Routes/index");
+const session = require("express-session");
 const morgan = require("morgan");
+const router = require("./routes/index");
 
-server.use(express.json());
-server.use(morgan("dev"));
+const app = express();
 
-server.use((res, next) => {
+app.use(express.json());
+app.use(morgan("dev"));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "your_secret_key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
+
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
@@ -20,6 +31,6 @@ server.use((res, next) => {
   next();
 });
 
-server.use("/bold-backend", router);
+app.use("/todo-api-docs", router);
 
-module.exports = server;
+module.exports = app;
