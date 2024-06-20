@@ -21,4 +21,8 @@ Before setting up the project, ensure you have the following installed:
 
 ### Backend Setup (Node.js with PostgreSQL)
 
-npm run dev
+for start the back:
+
+1. create database in postgrest
+2. to run the project: npm run dev
+3. To test endpoints in swagger, you need the environment name and password.
