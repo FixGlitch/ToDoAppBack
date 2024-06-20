@@ -173,4 +173,133 @@ router.put("/:taskId", taskHandler.updateTaskHandler);
  */
 router.delete("/:taskId", taskHandler.deleteTaskHandler);
 
+/**
+ * @swagger
+ * /api/tasks/{taskId}/toggle:
+ *   patch:
+ *     summary: Toggle task completion status
+ *     description: Toggles the completion status of a task.
+ *     tags: [Tasks]
+ *     parameters:
+ *       - in: path
+ *         name: taskId
+ *         description: ID of the task to toggle status
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Task completion status toggled successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Confirmation message
+ *       404:
+ *         description: Task not found.
+ *       500:
+ *         description: Internal server error.
+ */
+router.patch('/:taskId/toggle', taskHandler.toggleTaskStatusHandler);
+
+/**
+ * @swagger
+ * /todo-api-docs/tasks/{categoryId}:
+ *   get:
+ *     summary: Get all tasks by category and user
+ *     description: Retrieves all tasks belonging to a specific category and user.
+ *     tags: [Tasks]
+ *     parameters:
+ *       - in: path
+ *         name: categoryId
+ *         description: ID of the category to retrieve tasks for
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - in: query
+ *         name: userId
+ *         description: ID of the user to retrieve tasks for
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: List of tasks retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Task'
+ *       404:
+ *         description: No tasks found for the category and user.
+ *       500:
+ *         description: Internal server error.
+ */
+router.get("/:categoryId", taskHandler.getAllTasksByCategoryAndUserHandler);
+
+/**
+ * @swagger
+ * /todo-api-docs/tasks/fortoday:
+ *   get:
+ *     summary: Get task for today
+ *     description: Retrieves a task for today based on user ID.
+ *     tags: [Tasks]
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         description: ID of the user to retrieve the task for
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Task for today retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Task'
+ *       404:
+ *         description: No task found for today and user.
+ *       500:
+ *         description: Internal server error.
+ */
+router.get('/fortoday', taskHandler.getTaskForTodayHandler);
+
+/**
+ * @swagger
+ * /api/tasks/completed:
+ *   get:
+ *     summary: Get all completed tasks for a user
+ *     description: Retrieves all completed tasks for a specific user.
+ *     tags: [Tasks]
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         description: ID of the user to fetch completed tasks
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: List of completed tasks retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Task'
+ *       500:
+ *         description: Internal server error.
+ */
+router.get('/completed', taskHandler.getAllCompletedTasksHandler);
+
 module.exports = router;
