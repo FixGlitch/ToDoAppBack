@@ -275,7 +275,7 @@ router.get('/fortoday', taskHandler.getTaskForTodayHandler);
 
 /**
  * @swagger
- * /api/tasks/completed:
+ * /todo-api-docs/tasks/completed:
  *   get:
  *     summary: Get all completed tasks for a user
  *     description: Retrieves all completed tasks for a specific user.
