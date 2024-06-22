@@ -31,6 +31,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/todo-api-docs", router);
+app.use("/todo-backend", router);
 
 module.exports = app;

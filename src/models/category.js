@@ -1,6 +1,4 @@
-const { DataTypes } = require("sequelize");
-
-module.exports = (sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   const Category = sequelize.define("Category", {
     category_id: {
       type: DataTypes.UUID,
@@ -16,6 +14,10 @@ module.exports = (sequelize) => {
     isEditable: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+      allowNull: false,
+    },
+    user_id: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
   });

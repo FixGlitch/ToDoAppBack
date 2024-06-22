@@ -1,56 +1,24 @@
 const { Category } = require("../db");
 
 const createCategory = async (categoryData) => {
-  try {
-    return await Category.create(categoryData);
-  } catch (error) {
-    throw new Error("Error creating category: " + error.message);
-  }
+  return await Category.create(categoryData);
 };
 
 const getAllCategories = async () => {
-  try {
-    return await Category.findAll();
-  } catch (error) {
-    throw new Error("Error fetching categories: " + error.message);
-  }
+  return await Category.findAll();
 };
 
 const getCategoryById = async (categoryId) => {
-  try {
-    const category = await Category.findByPk(categoryId);
-    if (!category) {
-      throw new Error("Category not found");
-    }
-    return category;
-  } catch (error) {
-    throw new Error("Error fetching category: " + error.message);
-  }
+  return await Category.findByPk(categoryId);
 };
 
 const updateCategory = async (categoryId, categoryData) => {
-  try {
-    const category = await Category.findByPk(categoryId);
-    if (!category) {
-      throw new Error("Category not found");
-    }
-    await category.update(categoryData);
-    return category;
-  } catch (error) {
-    throw new Error("Error updating category: " + error.message);
-  }
+  await Category.update(categoryData, { where: { category_id: categoryId } });
+  return await Category.findByPk(categoryId);
 };
 
 const deleteCategory = async (categoryId) => {
-  try {
-    const category = await Category.findByPk(categoryId);
-    if (!category) {
-      throw new Error("Category not found");
-    }
-    await category.destroy();
-  } catch (error) {
-    throw new Error("Error deleting category: " + error.message);
-  }
+  return await Category.destroy({ where: { category_id: categoryId } });
 };
 
 module.exports = {

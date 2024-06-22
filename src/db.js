@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Sequelize } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, SSL } = process.env;
@@ -26,11 +26,10 @@ fs.readdirSync(path.join(__dirname, "./models"))
       file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
   )
   .forEach((file) => {
-    const modelDefiner = require(path.join(__dirname, "./models", file));
-    modelDefiners.push(modelDefiner);
+    modelDefiners.push(require(path.join(__dirname, "/models", file)));
   });
 
-modelDefiners.forEach((modelDefiner) => modelDefiner(sequelize));
+modelDefiners.forEach((modelDefiner) => modelDefiner(sequelize, DataTypes));
 
 const entries = Object.entries(sequelize.models);
 const capsEntries = entries.map(([key, value]) => [

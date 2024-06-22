@@ -44,7 +44,7 @@ const taskHandler = require("../handlers/task.handler");
 
 /**
  * @swagger
- * /todo-api-docs/tasks:
+ * /todo-backend/tasks:
  *   post:
  *     summary: Create a new task
  *     description: Creates a new task.
@@ -69,7 +69,7 @@ router.post("/", taskHandler.createTaskHandler);
 
 /**
  * @swagger
- * /todo-api-docs/tasks:
+ * /todo-backend/tasks:
  *   get:
  *     summary: Get all tasks
  *     description: Retrieves a list of all tasks.
@@ -90,7 +90,7 @@ router.get("/", taskHandler.getAllTasksHandler);
 
 /**
  * @swagger
- * /todo-api-docs/tasks/{taskId}:
+ * /todo-backend/tasks/{taskId}:
  *   get:
  *     summary: Get task by ID
  *     description: Retrieves a task by its ID.
@@ -119,7 +119,7 @@ router.get("/:taskId", taskHandler.getTaskByIdHandler);
 
 /**
  * @swagger
- * /todo-api-docs/tasks/{taskId}:
+ * /todo-backend/tasks/{taskId}:
  *   put:
  *     summary: Update task
  *     description: Updates an existing task.
@@ -152,7 +152,7 @@ router.put("/:taskId", taskHandler.updateTaskHandler);
 
 /**
  * @swagger
- * /todo-api-docs/tasks/{taskId}:
+ * /todo-backend/tasks/{taskId}:
  *   delete:
  *     summary: Delete task
  *     description: Deletes an existing task by its ID.

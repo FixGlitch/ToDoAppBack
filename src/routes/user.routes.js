@@ -1,6 +1,6 @@
 const express = require("express");
 const userRouter = express.Router();
-const userHandler = require("../Handlers/user.handler");
+const userHandler = require("../handlers/user.handler");
 
 /**
  * @swagger
@@ -29,7 +29,7 @@ const userHandler = require("../Handlers/user.handler");
 
 /**
  * @swagger
- * /todo-api-docs/user/register:
+ * /todo-backend/user/register:
  *   post:
  *     summary: Create user
  *     description: Creates a new user.
@@ -54,7 +54,7 @@ userRouter.post("/register", userHandler.createUserHandler);
 
 /**
  * @swagger
- * /todo-api-docs/user/login:
+ * /todo-backend/user/login:
  *   post:
  *     summary: User login
  *     description: Authenticates a user and starts a session.
@@ -85,7 +85,7 @@ userRouter.post("/login", userHandler.loginUserHandler);
 
 /**
  * @swagger
- * /todo-api-docs/user/logout:
+ * /todo-backend/user/logout:
  *   post:
  *     summary: User logout
  *     description: Logs out a user and ends the session.
@@ -108,7 +108,7 @@ userRouter.post("/logout", userHandler.logoutUserHandler);
 
 /**
  * @swagger
- * /todo-api-docs/user/auth-check:
+ * /todo-backend/user/auth-check:
  *   get:
  *     summary: Check authentication
  *     description: Checks if the user is authenticated.

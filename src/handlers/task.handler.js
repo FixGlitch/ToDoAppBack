@@ -1,12 +1,11 @@
 const taskController = require("../controllers/task.controller");
 
 const createTaskHandler = async (req, res) => {
-  const taskData = req.body;
   try {
-    const newTask = await taskController.createTask(taskData);
-    res.status(201).json(newTask);
+    const task = await taskController.createTask(req.body);
+    res.status(201).json(task);
   } catch (error) {
-    res.status(500).json({ error: "Error creating task: " + error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -15,41 +14,38 @@ const getAllTasksHandler = async (req, res) => {
     const tasks = await taskController.getAllTasks();
     res.status(200).json(tasks);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching tasks: " + error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const getTaskByIdHandler = async (req, res) => {
-  const { taskId } = req.params;
   try {
-    const task = await taskController.getTaskById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
+    const task = await taskController.getTaskById(req.params.taskId);
+    if (task) {
+      res.status(200).json(task);
+    } else {
+      res.status(404).json({ error: "Task not found" });
     }
-    res.status(200).json(task);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching task: " + error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const updateTaskHandler = async (req, res) => {
-  const { taskId } = req.params;
-  const taskData = req.body;
   try {
-    const updatedTask = await taskController.updateTask(taskId, taskData);
-    res.status(200).json(updatedTask);
+    const task = await taskController.updateTask(req.params.taskId, req.body);
+    res.status(200).json(task);
   } catch (error) {
-    res.status(500).json({ error: "Error updating task: " + error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const deleteTaskHandler = async (req, res) => {
-  const { taskId } = req.params;
   try {
-    await taskController.deleteTask(taskId);
+    await taskController.deleteTask(req.params.taskId);
     res.status(200).json({ message: "Task deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Error deleting task: " + error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 

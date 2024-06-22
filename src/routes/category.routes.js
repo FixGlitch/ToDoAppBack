@@ -37,7 +37,7 @@ const categoryHandler = require("../handlers/category.handler");
 
 /**
  * @swagger
- * /todo-api-docs/categories:
+ * /todo-backend/categories:
  *   post:
  *     summary: Create a new category
  *     description: Creates a new category.
@@ -62,7 +62,7 @@ router.post("/", categoryHandler.createCategoryHandler);
 
 /**
  * @swagger
- * /todo-api-docs/categories:
+ * /todo-backend/categories:
  *   get:
  *     summary: Get all categories
  *     description: Retrieves a list of all categories.
@@ -83,7 +83,7 @@ router.get("/", categoryHandler.getAllCategoriesHandler);
 
 /**
  * @swagger
- * /todo-api-docs/categories/{categoryId}:
+ * /todo-backend/categories/{categoryId}:
  *   get:
  *     summary: Get category by ID
  *     description: Retrieves a category by its ID.
@@ -112,7 +112,7 @@ router.get("/:categoryId", categoryHandler.getCategoryByIdHandler);
 
 /**
  * @swagger
- * /todo-api-docs/categories/{categoryId}:
+ * /todo-backend/categories/{categoryId}:
  *   put:
  *     summary: Update category
  *     description: Updates an existing category.
@@ -145,7 +145,7 @@ router.put("/:categoryId", categoryHandler.updateCategoryHandler);
 
 /**
  * @swagger
- * /todo-api-docs/categories/{categoryId}:
+ * /todo-backend/categories/{categoryId}:
  *   delete:
  *     summary: Delete category
  *     description: Deletes an existing category by its ID.
