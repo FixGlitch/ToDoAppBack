@@ -40,10 +40,61 @@ const deleteTask = async (taskId) => {
   }
 };
 
+const toggleTaskStatus = async (taskId) => {
+  try {
+    const task = await taskService.getTaskById(taskId);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+    task.isCompleted = !task.isCompleted;
+    await task.save();
+    return task;
+  } catch (error) {
+    throw new Error(
+      "Error toggling task status in controller: " + error.message
+    );
+  }
+};
+
+const getAllTasksByCategoryAndUser = async (categoryId, userId) => {
+  try {
+    return await taskService.getAllTasksByCategoryAndUser(categoryId, userId);
+  } catch (error) {
+    throw new Error("Error fetching tasks in controller: " + error.message);
+  }
+};
+
+const getTaskForToday = async (userId) => {
+  try {
+    const todayStart = startOfDay(new Date());
+    const todayEnd = endOfDay(new Date());
+
+    return await taskService.getTaskForToday(userId, todayStart, todayEnd);
+  } catch (error) {
+    throw new Error(
+      "Error fetching task for today in controller: " + error.message
+    );
+  }
+};
+
+const getAllCompletedTasks = async (userId) => {
+  try {
+    return await taskService.getAllCompletedTasks(userId);
+  } catch (error) {
+    throw new Error(
+      "Error fetching completed tasks in controller: " + error.message
+    );
+  }
+};
+
 module.exports = {
   createTask,
   getAllTasks,
   getTaskById,
   updateTask,
   deleteTask,
+  getAllTasksByCategoryAndUser,
+  getTaskForToday,
+  toggleTaskStatus,
+  getAllCompletedTasks,
 };
