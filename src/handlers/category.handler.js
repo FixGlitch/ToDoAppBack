@@ -1,11 +1,14 @@
 const categoryController = require("../controllers/category.controller");
 
 const createCategoryHandler = async (req, res) => {
+  const categoryData = req.body;
   try {
-    const category = await categoryController.createCategory(req.body);
-    res.status(201).json(category);
+    const newCategory = await categoryController.createCategory(categoryData);
+    res.status(201).json(newCategory);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res
+      .status(500)
+      .json({ error: "Error creating category: " + error.message });
   }
 };
 
@@ -14,43 +17,52 @@ const getAllCategoriesHandler = async (req, res) => {
     const categories = await categoryController.getAllCategories();
     res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res
+      .status(500)
+      .json({ error: "Error fetching categories: " + error.message });
   }
 };
 
 const getCategoryByIdHandler = async (req, res) => {
+  const { categoryId } = req.params;
   try {
-    const category = await categoryController.getCategoryById(
-      req.params.categoryId
-    );
-    if (category) {
-      res.status(200).json(category);
-    } else {
-      res.status(404).json({ error: "Category not found" });
+    const category = await categoryController.getCategoryById(categoryId);
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
     }
+    res.status(200).json(category);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res
+      .status(500)
+      .json({ error: "Error fetching category: " + error.message });
   }
 };
 
 const updateCategoryHandler = async (req, res) => {
+  const { categoryId } = req.params;
+  const categoryData = req.body;
   try {
-    const category = await categoryController.updateCategory(
-      req.params.categoryId,
-      req.body
+    const updatedCategory = await categoryController.updateCategory(
+      categoryId,
+      categoryData
     );
-    res.status(200).json(category);
+    res.status(200).json(updatedCategory);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res
+      .status(500)
+      .json({ error: "Error updating category: " + error.message });
   }
 };
 
 const deleteCategoryHandler = async (req, res) => {
+  const { categoryId } = req.params;
   try {
-    await categoryController.deleteCategory(req.params.categoryId);
+    await categoryController.deleteCategory(categoryId);
     res.status(200).json({ message: "Category deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res
+      .status(500)
+      .json({ error: "Error deleting category: " + error.message });
   }
 };
 

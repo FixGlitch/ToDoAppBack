@@ -29,6 +29,137 @@ const userHandler = require("../handlers/user.handler");
 
 /**
  * @swagger
+ * /todo-backend/user:
+ *   post:
+ *     summary: Create a new user
+ *     description: Creates a new user.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserPostData'
+ *     responses:
+ *       201:
+ *         description: User created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserPostData'
+ *       500:
+ *         description: Internal server error.
+ */
+userRouter.post("/", userHandler.createNewUserHandler);
+
+/**
+ * @swagger
+ * /todo-backend/user:
+ *   get:
+ *     summary: Get all users
+ *     description: Retrieves a list of all users.
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: List of users retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Internal server error.
+ */
+userRouter.get("/", userHandler.getAllUsersHandler);
+
+/**
+ * @swagger
+ * /todo-backend/user/{userId}:
+ *   get:
+ *     summary: Get user by ID
+ *     description: Retrieves a user by its ID.
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         description: ID of the user to retrieve
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: User retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
+ */
+userRouter.get("/:userId", userHandler.getUserByIdHandler);
+
+/**
+ * @swagger
+ * /todo-backend/user/{userId}:
+ *   put:
+ *     summary: Update user
+ *     description: Updates an existing user.
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         description: ID of the user to update
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: User updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Internal server error.
+ */
+userRouter.put("/:userId", userHandler.updateUserHandler);
+
+/**
+ * @swagger
+ * /todo-backend/user/{userId}:
+ *   delete:
+ *     summary: Delete user
+ *     description: Deletes an existing user by its ID.
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         description: ID of the user to delete
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: User deleted successfully.
+ *       500:
+ *         description: Internal server error.
+ */
+userRouter.delete("/:userId", userHandler.deleteUserHandler);
+
+/**
+ * @swagger
  * /todo-backend/user/register:
  *   post:
  *     summary: Create user

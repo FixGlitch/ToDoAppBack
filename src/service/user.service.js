@@ -1,19 +1,64 @@
 const { User } = require("../db");
+const bcrypt = require("bcrypt");
 
-const createUserService = async ({ username, password }) => {
+const createUser = async ({ username, password }) => {
   try {
     const existingUser = await User.findOne({ where: { username } });
     if (existingUser) {
       throw new Error("Username is already in use");
     }
-    const user = await User.create({ username, password });
-    return user;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({ username, password: hashedPassword });
+    return newUser;
   } catch (error) {
     throw new Error(`Error creating user: ${error.message}`);
   }
 };
+const getAllUsers = async () => {
+  try {
+    return await User.findAll();
+  } catch (error) {
+    throw new Error("Error fetching user: " + error.message);
+  }
+};
 
-const findUserByUsernameService = async (username) => {
+const getUserById = async (userId) => {
+  try {
+    return await User.findByPk(userId);
+  } catch (error) {
+    throw new Error(`Error fetching user: ${error.message}`);
+  }
+};
+
+const updateUser = async (userId, { username, password }) => {
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const [updated] = await User.update(
+      { username, password: hashedPassword },
+      { where: { user_id: userId } }
+    );
+    if (updated === 0) {
+      throw new Error("User not found or not updated");
+    }
+    const updatedUser = await User.findByPk(userId);
+    return updatedUser;
+  } catch (error) {
+    throw new Error(`Error updating user: ${error.message}`);
+  }
+};
+
+const deleteUser = async (userId) => {
+  try {
+    const deletedCount = await User.destroy({ where: { user_id: userId } });
+    if (deletedCount === 0) {
+      throw new Error("User not found or not deleted");
+    }
+  } catch (error) {
+    throw new Error(`Error deleting user: ${error.message}`);
+  }
+};
+
+const findUserByUsername = async (username) => {
   try {
     return await User.findOne({ where: { username } });
   } catch (error) {
@@ -22,6 +67,10 @@ const findUserByUsernameService = async (username) => {
 };
 
 module.exports = {
-  createUserService,
-  findUserByUsernameService,
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  findUserByUsername,
 };

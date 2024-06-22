@@ -16,30 +16,26 @@ const taskHandler = require("../handlers/task.handler");
  *     Task:
  *       type: object
  *       properties:
- *         task_id:
- *           type: string
- *           format: uuid
- *           description: The unique identifier of the task.
  *         name:
  *           type: string
  *           description: The name of the task.
  *         description:
  *           type: string
  *           description: The description of the task.
- *         status:
- *           type: string
- *           description: The status of the task.
- *         due_date:
- *           type: string
- *           format: date-time
- *           description: The due date of the task.
+ *         isCompleted:
+ *           type: boolean
+ *           description: The completion status of the task.
  *         category_id:
  *           type: string
  *           format: uuid
  *           description: The ID of the category to which the task belongs.
+ *         user_id:
+ *           type: string
+ *           format: uuid
+ *           description: The ID of the user who owns the task.
  *       required:
  *         - name
- *         - status
+ *         - isCompleted
  */
 
 /**
@@ -175,7 +171,7 @@ router.delete("/:taskId", taskHandler.deleteTaskHandler);
 
 /**
  * @swagger
- * /api/tasks/{taskId}/toggle:
+ * /todo-backend/tasks/{taskId}/toggle:
  *   patch:
  *     summary: Toggle task completion status
  *     description: Toggles the completion status of a task.
@@ -204,11 +200,11 @@ router.delete("/:taskId", taskHandler.deleteTaskHandler);
  *       500:
  *         description: Internal server error.
  */
-router.patch('/:taskId/toggle', taskHandler.toggleTaskStatusHandler);
+router.patch("/:taskId/toggle", taskHandler.toggleTaskStatusHandler);
 
 /**
  * @swagger
- * /todo-api-docs/tasks/{categoryId}:
+ * /todo-backend/tasks/{categoryId}:
  *   get:
  *     summary: Get all tasks by category and user
  *     description: Retrieves all tasks belonging to a specific category and user.
@@ -242,11 +238,14 @@ router.patch('/:taskId/toggle', taskHandler.toggleTaskStatusHandler);
  *       500:
  *         description: Internal server error.
  */
-router.get("/:categoryId", taskHandler.getAllTasksByCategoryAndUserHandler);
+router.get(
+  "/category/:categoryId",
+  taskHandler.getAllTasksByCategoryAndUserHandler
+);
 
 /**
  * @swagger
- * /todo-api-docs/tasks/fortoday:
+ * /todo-backend/tasks/fortoday:
  *   get:
  *     summary: Get task for today
  *     description: Retrieves a task for today based on user ID.
@@ -271,11 +270,11 @@ router.get("/:categoryId", taskHandler.getAllTasksByCategoryAndUserHandler);
  *       500:
  *         description: Internal server error.
  */
-router.get('/fortoday', taskHandler.getTaskForTodayHandler);
+router.get("/fortoday", taskHandler.getTaskForTodayHandler);
 
 /**
  * @swagger
- * /todo-api-docs/tasks/completed:
+ * /todo-backend/tasks/completed:
  *   get:
  *     summary: Get all completed tasks for a user
  *     description: Retrieves all completed tasks for a specific user.
@@ -300,6 +299,6 @@ router.get('/fortoday', taskHandler.getTaskForTodayHandler);
  *       500:
  *         description: Internal server error.
  */
-router.get('/completed', taskHandler.getAllCompletedTasksHandler);
+router.get("/completed", taskHandler.getAllCompletedTasksHandler);
 
 module.exports = router;
