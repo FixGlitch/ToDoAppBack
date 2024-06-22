@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || "your_secret_key",
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
