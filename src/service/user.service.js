@@ -1,19 +1,14 @@
 const { User } = require("../db");
 const bcrypt = require("bcrypt");
 
-const createUser = async ({ username, password }) => {
+const createUser = async (userData) => {
   try {
-    const existingUser = await User.findOne({ where: { username } });
-    if (existingUser) {
-      throw new Error("Username is already in use");
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ username, password: hashedPassword });
-    return newUser;
+    return await User.create(userData);
   } catch (error) {
     throw new Error(`Error creating user: ${error.message}`);
   }
 };
+
 const getAllUsers = async () => {
   try {
     return await User.findAll();

@@ -1,12 +1,12 @@
 const userController = require("../controllers/user.controller");
 
-const createNewUserHandler = async (req, res) => {
+const createUserHandler = async (req, res) => {
   const userData = req.body;
   try {
     const newUser = await userController.createUser(userData);
     res.status(201).json(newUser);
   } catch (error) {
-    res.status(500).json({ error: `Error creating user: ${error.message}` });
+    errorHandler(res, error);
   }
 };
 
@@ -53,16 +53,6 @@ const deleteUserHandler = async (req, res) => {
   }
 };
 
-const createUserHandler = async (req, res) => {
-  const userData = req.body;
-  try {
-    const newUser = await userController.createUser(userData);
-    res.status(201).json(newUser);
-  } catch (error) {
-    errorHandler(res, error);
-  }
-};
-
 const loginUserHandler = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -70,7 +60,7 @@ const loginUserHandler = async (req, res) => {
     req.session.userId = user.user_id;
     res.json({ message: "Login successful" });
   } catch (error) {
-    errorHandler(res, error);
+    res.status(401).json({ message: error.message });
   }
 };
 
@@ -97,7 +87,6 @@ const errorHandler = (res, error) => {
 };
 
 module.exports = {
-  createNewUserHandler,
   getAllUsersHandler,
   getUserByIdHandler,
   updateUserHandler,

@@ -1,16 +1,20 @@
+// src/app.js
+
 require("dotenv").config();
+const morgan = require("morgan");
 const express = require("express");
 const session = require("express-session");
-const morgan = require("morgan");
+const crypto = require("crypto");
 const router = require("./routes/index");
 
 const app = express();
+const secret = crypto.randomBytes(64).toString("hex");
 
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "your_secret_key",
+    secret: secret,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },

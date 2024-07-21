@@ -1,8 +1,11 @@
-const bcrypt = require("bcrypt");
 const userService = require("../service/user.service");
+const bcrypt = require("bcrypt");
 
-const createNewUser = async (userData) => {
+const createUser = async (userData) => {
   try {
+    const { password } = userData;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    userData.password = hashedPassword;
     return await userService.createUser(userData);
   } catch (error) {
     throw new Error(`Error creating user: ${error.message}`);
@@ -41,17 +44,6 @@ const deleteUser = async (userId) => {
   }
 };
 
-const createUser = async (userData) => {
-  try {
-    const { password } = userData;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    userData.password = hashedPassword;
-    return await userService.createUser(userData);
-  } catch (error) {
-    throw new Error(`Error creating user: ${error.message}`);
-  }
-};
-
 const authenticateUser = async (username, password) => {
   try {
     const user = await userService.findUserByUsername(username);
@@ -69,7 +61,6 @@ const authenticateUser = async (username, password) => {
 };
 
 module.exports = {
-  createNewUser,
   getAllUsers,
   getUserById,
   updateUser,

@@ -31,7 +31,7 @@ const userHandler = require("../handlers/user.handler");
  * @swagger
  * /todo-backend/user:
  *   post:
- *     summary: Create a new user
+ *     summary: Create user
  *     description: Creates a new user.
  *     tags: [Users]
  *     requestBody:
@@ -50,7 +50,7 @@ const userHandler = require("../handlers/user.handler");
  *       500:
  *         description: Internal server error.
  */
-userRouter.post("/", userHandler.createNewUserHandler);
+userRouter.post("/", userHandler.createUserHandler);
 
 /**
  * @swagger
@@ -157,31 +157,6 @@ userRouter.put("/:userId", userHandler.updateUserHandler);
  *         description: Internal server error.
  */
 userRouter.delete("/:userId", userHandler.deleteUserHandler);
-
-/**
- * @swagger
- * /todo-backend/user/register:
- *   post:
- *     summary: Create user
- *     description: Creates a new user.
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UserPostData'
- *     responses:
- *       201:
- *         description: User created successfully.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UserPostData'
- *       500:
- *         description: Internal server error.
- */
-userRouter.post("/register", userHandler.createUserHandler);
 
 /**
  * @swagger
