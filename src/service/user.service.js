@@ -13,7 +13,7 @@ const getAllUsers = async () => {
   try {
     return await User.findAll();
   } catch (error) {
-    throw new Error("Error fetching user: " + error.message);
+    throw new Error(`Error fetching users: ${error.message}`);
   }
 };
 
@@ -27,16 +27,10 @@ const getUserById = async (userId) => {
 
 const updateUser = async (userId, { username, password }) => {
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const [updated] = await User.update(
-      { username, password: hashedPassword },
+    return await User.update(
+      { username, password },
       { where: { user_id: userId } }
     );
-    if (updated === 0) {
-      throw new Error("User not found or not updated");
-    }
-    const updatedUser = await User.findByPk(userId);
-    return updatedUser;
   } catch (error) {
     throw new Error(`Error updating user: ${error.message}`);
   }
@@ -44,10 +38,7 @@ const updateUser = async (userId, { username, password }) => {
 
 const deleteUser = async (userId) => {
   try {
-    const deletedCount = await User.destroy({ where: { user_id: userId } });
-    if (deletedCount === 0) {
-      throw new Error("User not found or not deleted");
-    }
+    return await User.destroy({ where: { user_id: userId } });
   } catch (error) {
     throw new Error(`Error deleting user: ${error.message}`);
   }

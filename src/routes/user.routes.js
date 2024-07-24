@@ -163,7 +163,7 @@ userRouter.delete("/:userId", userHandler.deleteUserHandler);
  * /todo-backend/user/login:
  *   post:
  *     summary: User login
- *     description: Authenticates a user and starts a session.
+ *     description: Authenticates a user and returns a JWT token.
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -173,15 +173,15 @@ userRouter.delete("/:userId", userHandler.deleteUserHandler);
  *             $ref: '#/components/schemas/UserPostData'
  *     responses:
  *       200:
- *         description: Login successful.
+ *         description: Login successful and token provided.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 token:
  *                   type: string
- *                   example: Login successful
+ *                   description: JWT token for the user.
  *       401:
  *         description: Invalid username or password.
  *       500:
@@ -194,7 +194,7 @@ userRouter.post("/login", userHandler.loginUserHandler);
  * /todo-backend/user/logout:
  *   post:
  *     summary: User logout
- *     description: Logs out a user and ends the session.
+ *     description: Logs out a user by invalidating their JWT token.
  *     tags: [Users]
  *     responses:
  *       200:
@@ -217,7 +217,7 @@ userRouter.post("/logout", userHandler.logoutUserHandler);
  * /todo-backend/user/auth-check:
  *   get:
  *     summary: Check authentication
- *     description: Checks if the user is authenticated.
+ *     description: Checks if the user is authenticated using JWT.
  *     tags: [Users]
  *     responses:
  *       200:

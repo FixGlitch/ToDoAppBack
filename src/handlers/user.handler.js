@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const userController = require("../controllers/user.controller");
 
 const createUserHandler = async (req, res) => {
@@ -15,7 +16,7 @@ const getAllUsersHandler = async (req, res) => {
     const users = await userController.getAllUsers();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ error: `Error fetching users: ${error.message}` });
+    errorHandler(res, error);
   }
 };
 
@@ -28,7 +29,7 @@ const getUserByIdHandler = async (req, res) => {
     }
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: `Error fetching user: ${error.message}` });
+    errorHandler(res, error);
   }
 };
 
@@ -39,7 +40,7 @@ const updateUserHandler = async (req, res) => {
     const updatedUser = await userController.updateUser(userId, userData);
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(500).json({ error: `Error updating user: ${error.message}` });
+    errorHandler(res, error);
   }
 };
 
@@ -49,35 +50,40 @@ const deleteUserHandler = async (req, res) => {
     await userController.deleteUser(userId);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: `Error deleting user: ${error.message}` });
+    errorHandler(res, error);
   }
 };
 
 const loginUserHandler = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await userController.authenticateUser(username, password);
-    req.session.userId = user.user_id;
-    res.json({ message: "Login successful" });
+    const { user, token } = await userController.authenticateUser(
+      username,
+      password
+    );
+    res.json({ message: "Login successful", user, token });
   } catch (error) {
     res.status(401).json({ message: error.message });
   }
 };
 
 const logoutUserHandler = async (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return errorHandler(res, err);
-    }
-    res.json({ message: "Logout successful" });
-  });
+  res.json({ message: "Logout successful" });
 };
 
 const checkAuthHandler = async (req, res) => {
-  if (req.session.userId) {
-    res.json({ message: "Authenticated" });
-  } else {
-    res.status(401).json({ message: "Not authenticated" });
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "No token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ message: "Authenticated", userId: decoded.userId });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 
@@ -87,11 +93,11 @@ const errorHandler = (res, error) => {
 };
 
 module.exports = {
+  createUserHandler,
   getAllUsersHandler,
   getUserByIdHandler,
   updateUserHandler,
   deleteUserHandler,
-  createUserHandler,
   loginUserHandler,
   logoutUserHandler,
   checkAuthHandler,
